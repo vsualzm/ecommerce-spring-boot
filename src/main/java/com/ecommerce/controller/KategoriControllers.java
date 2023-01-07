@@ -32,11 +32,12 @@ public class KategoriControllers {
 
     @PutMapping("/kategoris")
     public Kategori edit(@RequestBody Kategori kategori){
-       return kategoriService.edit(kategori);
+        return kategoriService.edit(kategori);
     }
 
     @DeleteMapping("/kategoris/{id}")
-    public void deleteById(@PathVariable("id") String id){
+    public String deleteById(@PathVariable("id") String id){
         kategoriService.deleteById(id);
+        return "SUCCESS DELETE KATEGORIS";
     }
 }
