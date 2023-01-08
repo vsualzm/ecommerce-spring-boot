@@ -1,16 +1,14 @@
 package com.ecommerce.service;
 
-
-import com.ecommerce.entity.Kategori;
 import com.ecommerce.entity.Pengguna;
+import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.exception.ResourceNotFoundException;
-import com.ecommerce.repository.KategoriRepository;
 import com.ecommerce.repository.PenggunaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class PenggunaService {
@@ -27,13 +25,39 @@ public class PenggunaService {
         return penggunaRepository.findAll();
     }
 
-    public Pengguna create(Pengguna Pengguna){
-        Pengguna.setId(UUID.randomUUID().toString());
-        return penggunaRepository.save(Pengguna);
+    public Pengguna create(Pengguna pengguna){
+        if (!StringUtils.hasText(pengguna.getId())){
+            throw new BadRequestException("Username harus di isi");
+        }
+
+        if(penggunaRepository.existsById(pengguna.getId())){
+            throw new BadRequestException("Username " + pengguna.getId() + "sudah terdaftar");
+        }
+
+        if(!StringUtils.hasText(pengguna.getEmail())){
+            throw new BadRequestException("Email harus di isi ");
+        }
+
+        if(penggunaRepository.existsByEmail(pengguna.getEmail())){
+            throw new BadRequestException("Email" + pengguna.getEmail() + "sudah terdaftar");
+        }
+
+        pengguna.setIsAktif(true);
+
+        return penggunaRepository.save(pengguna);
+
     }
 
-    public Pengguna edit(Pengguna Pengguna){
-        return penggunaRepository.save(Pengguna);
+    public Pengguna edit(Pengguna pengguna){
+
+        if (!StringUtils.hasText(pengguna.getId())){
+            throw new BadRequestException("Username harus di isi");
+        }
+        if(!StringUtils.hasText(pengguna.getEmail())){
+            throw new BadRequestException("Email harus di isi ");
+        }
+
+        return penggunaRepository.save(pengguna);
     }
 
     public void deleteById(String id){
