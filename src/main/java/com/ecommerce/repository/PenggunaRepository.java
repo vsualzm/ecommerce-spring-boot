@@ -1,8 +1,9 @@
 package com.ecommerce.repository;
 
-import com.ecommerce.entity.Keranjang;
+
+import com.ecommerce.entity.Pengguna;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PenggunaRepository extends JpaRepository<Keranjang, String> {
+public interface PenggunaRepository extends JpaRepository<Pengguna, String> {
 
 }
